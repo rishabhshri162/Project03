@@ -1,6 +1,7 @@
 package in.co.rays.project_3.controller;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -68,20 +69,15 @@ public class JasperCtl extends BaseCtl {
 			if ("JDBC".equalsIgnoreCase(Database)) {
 				conn = JDBCDataSource.getConnection();
 			}
-InputStream is = getClass()
-        .getClassLoader()
-        .getResourceAsStream("report/MarksheetMeritList.jrxml");
+			InputStream is = getClass().getClassLoader().getResourceAsStream("report/rishabhreport.jrxml");
 
-JasperReport jasperReport =
-        JasperCompileManager.compileReport(is);
+			JasperReport jasperReport1 = JasperCompileManager.compileReport(is);
 
-JasperPrint jasperPrint =
-        JasperFillManager.fillReport(jasperReport, map, conn);
+			JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport1, map, conn);
 
-System.out.println("Pages: " + jasperPrint.getPages().size());
+			System.out.println("Pages: " + jasperPrint.getPages().size());
 
-byte[] pdf = JasperExportManager.exportReportToPdf(jasperPrint);
-
+			byte[] pdf = JasperExportManager.exportReportToPdf(jasperPrint);
 
 			response.setContentType("application/pdf");
 			response.getOutputStream().write(pdf);
