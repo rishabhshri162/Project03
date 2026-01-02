@@ -68,12 +68,20 @@ public class JasperCtl extends BaseCtl {
 			if ("JDBC".equalsIgnoreCase(Database)) {
 				conn = JDBCDataSource.getConnection();
 			}
+InputStream is = getClass()
+        .getClassLoader()
+        .getResourceAsStream("report/MarksheetMeritList.jrxml");
 
-			/* Filling data into the report */
-			JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map, conn);
+JasperReport jasperReport =
+        JasperCompileManager.compileReport(is);
 
-			/* Export Jasper report */
-			byte[] pdf = JasperExportManager.exportReportToPdf(jasperPrint);
+JasperPrint jasperPrint =
+        JasperFillManager.fillReport(jasperReport, map, conn);
+
+System.out.println("Pages: " + jasperPrint.getPages().size());
+
+byte[] pdf = JasperExportManager.exportReportToPdf(jasperPrint);
+
 
 			response.setContentType("application/pdf");
 			response.getOutputStream().write(pdf);
