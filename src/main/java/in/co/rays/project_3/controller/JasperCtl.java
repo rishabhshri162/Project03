@@ -17,7 +17,6 @@ import org.hibernate.impl.SessionImpl;
 import in.co.rays.project_3.dto.UserDTO;
 import in.co.rays.project_3.util.HibDataSource;
 import in.co.rays.project_3.util.JDBCDataSource;
-
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -28,26 +27,33 @@ import net.sf.jasperreports.engine.JasperReport;
  * Jasper functionality Controller. Performs operation for Print pdf of
  * MarksheetMeriteList
  *
- * @author Rishabh shrivastava
+ * @author Akbar Mansuri
  */
 @WebServlet(name = "JasperCtl", urlPatterns = { "/ctl/JasperCtl" })
 public class JasperCtl extends BaseCtl {
 
 	/**
 	 * 
+	 * <artifactId>jasperreports</artifactId> <version>6.13.0</version>
 	 */
+	
 	private static final long serialVersionUID = 1L;
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
-			System.out.println("wertyu");
+
 			ResourceBundle rb = ResourceBundle.getBundle("in.co.rays.project_3.bundle.system");
-			System.out.println("wertyuio111ss");
-			/* Compilation of jrxml file */
-			JasperReport jasperReport = JasperCompileManager.compileReport(rb.getString("jasperctl"));
-			System.out.println("wertyuio");
+
+			InputStream jrxmlStream = getClass().getClassLoader().getResourceAsStream("reports/rishabhreport.jrxml");
+
+			JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlStream);
+//
+//			/* Compilation of jrxml file */
+//			JasperReport jasperReport =JasperCompileManager
+//					   .compileReport("D:\\Project-03\\Project-03\\project_3\\src\\main\\resources\\reports\\p3.jrxml");
+
 			HttpSession session = request.getSession(true);
 
 			UserDTO dto = (UserDTO) session.getAttribute("user");
@@ -69,14 +75,11 @@ public class JasperCtl extends BaseCtl {
 			if ("JDBC".equalsIgnoreCase(Database)) {
 				conn = JDBCDataSource.getConnection();
 			}
-			InputStream is = getClass().getClassLoader().getResourceAsStream("report/rishabhreport.jrxml");
 
-			JasperReport jasperReport1 = JasperCompileManager.compileReport(is);
+			/* Filling data into the report */
+			JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map, conn);
 
-			JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport1, map, conn);
-
-			System.out.println("Pages: " + jasperPrint.getPages().size());
-
+			/* Export Jasper report */
 			byte[] pdf = JasperExportManager.exportReportToPdf(jasperPrint);
 
 			response.setContentType("application/pdf");
@@ -84,6 +87,7 @@ public class JasperCtl extends BaseCtl {
 			response.getOutputStream().flush();
 
 		} catch (Exception e) {
+			e.printStackTrace();
 
 		}
 	}
