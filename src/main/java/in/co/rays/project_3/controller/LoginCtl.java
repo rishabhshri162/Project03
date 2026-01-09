@@ -163,7 +163,9 @@ public class LoginCtl extends BaseCtl {
 
 			} catch (ApplicationException e) {
 				log.error(e);
-				ServletUtility.handleException(e, request, response);
+				//ServletUtility.handleException(e, request, response);
+				ServletUtility.setErrorMessage("YOUR MYSQL CONTAINER IS OFF COMMUNICTAION LINK FAILURE!", request);
+				ServletUtility.forward(getView(), request, response);
 				return;
 			}
 
