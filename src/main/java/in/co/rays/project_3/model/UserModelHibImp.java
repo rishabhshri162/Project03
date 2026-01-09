@@ -268,43 +268,39 @@ public class UserModelHibImp implements UserModelInt {
 
 		return list;
 	}
+public UserDTO authenticate(String login, String password) throws ApplicationException {
 
-		public UserDTO authenticate(String login, String password) throws ApplicationException {
+    Session session = null;
 
-	    Session session = null;
-	    UserDTO dto = null;
+    try {
+        session = HibDataSource.getSession();
 
-	    try {
-	        session = HibDataSource.getSession();
+        Query q = session.createQuery(
+            "from UserDTO where login = :login and password = :password"
+        );
+        q.setString("login", login);
+        q.setString("password", password);
 
-	        Query q = session.createQuery(
-	            "from UserDTO where login = :login and password = :password"
-	        );
-	        q.setString("login", login);
-	        q.setString("password", password);
+        List list = q.list();
 
-	        List list = q.list();
+        if (list != null && !list.isEmpty()) {
+            return (UserDTO) list.get(0);
+        }
+        return null;   // ❗ wrong credentials
 
-	        if (!list.isEmpty()) {
-	            dto = (UserDTO) list.get(0);
-	        }
+    } catch (org.hibernate.exception.JDBCConnectionException e) {
+        // ❗ DB DOWN CASE
+        throw new ApplicationException("DB_DOWN");
 
-	    } catch (org.hibernate.exception.JDBCConnectionException e) {
-	        throw new ApplicationException(
-	            "Database server is down. Please start MySQL Docker container."
-	        );
+    } catch (Exception e) {
+        throw new ApplicationException("SYSTEM_ERROR", e);
 
-	    } catch (Exception e) {
-	        throw new ApplicationException("Authentication failed due to system error");
-
-	    } finally {
-	        if (session != null) {
-	            session.close();
-	        }
-	    }
-
-	    return dto;
-	}
+    } finally {
+        if (session != null) {
+            session.close();
+        }
+    }
+}
 
 
 	public List getRoles(UserDTO dto) throws ApplicationException {
