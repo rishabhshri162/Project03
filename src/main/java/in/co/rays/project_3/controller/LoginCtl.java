@@ -128,57 +128,65 @@ public class LoginCtl extends BaseCtl {
 		UserModelInt userModel = ModelFactory.getInstance().getUserModel();
 		RoleModelInt model1 = ModelFactory.getInstance().getRoleModel();
 
-		if (OP_SIGN_IN.equalsIgnoreCase(op)) {
-			UserDTO dto = (UserDTO) populateDTO(request);
-			try {
-				dto = userModel.authenticate(dto.getLogin(), dto.getPassword());
-				if (dto != null) {
-					session.setAttribute("user", dto);
-					long roleId = dto.getRoleId();
-					RoleDTO rdto = model1.findByPK(roleId);
-					if (rdto != null) {
-						session.setAttribute("role", rdto.getName());
-					}
-					String uri = (String) request.getParameter("uri");
-					if (uri == null || "null".equalsIgnoreCase(uri)) {
-						ServletUtility.redirect(ORSView.WELCOME_CTL, request, response);
-						return;
-					} else {
-						System.out.println();
-						if (rdto.getId() == 1) {
-							ServletUtility.redirect(uri, request, response);
-						} else {
-							ServletUtility.redirect(ORSView.WELCOME_CTL, request, response);
-						}
+	if (OP_SIGN_IN.equalsIgnoreCase(op)) {
 
-						return;
-					}
+    UserDTO dto = (UserDTO) populateDTO(request);
 
-				} else {
-					dto = (UserDTO) populateDTO(request);
-					ServletUtility.setDto(dto, request);
-					ServletUtility.setErrorMessage("Invalid LoginId And Password!", request);
-				}
+    try {
 
-	catch (ApplicationException e) {
+        dto = userModel.authenticate(dto.getLogin(), dto.getPassword());
 
-    log.error(e);
+        if (dto != null) {
 
-    UserDTO formDto = (UserDTO) populateDTO(request);
-    ServletUtility.setDto(formDto, request);
+            session.setAttribute("user", dto);
 
-    if (e.getMessage().contains("Database")) {
-        ServletUtility.setErrorMessage(
-            "Server is temporarily unavailable. Please start MySQL and try again.",
-            request
-        );
-    } else {
-        ServletUtility.setErrorMessage(e.getMessage(), request);
+            long roleId = dto.getRoleId();
+            RoleDTO rdto = model1.findByPK(roleId);
+
+            if (rdto != null) {
+                session.setAttribute("role", rdto.getName());
+            }
+
+            String uri = request.getParameter("uri");
+
+            if (uri == null || "null".equalsIgnoreCase(uri)) {
+                ServletUtility.redirect(ORSView.WELCOME_CTL, request, response);
+                return;
+            } else {
+                if (rdto.getId() == 1) {
+                    ServletUtility.redirect(uri, request, response);
+                } else {
+                    ServletUtility.redirect(ORSView.WELCOME_CTL, request, response);
+                }
+                return;
+            }
+
+        } else {
+            ServletUtility.setDto(dto, request);
+            ServletUtility.setErrorMessage("Invalid LoginId And Password!", request);
+        }
+
+    } catch (ApplicationException e) {
+
+        log.error(e);
+
+        UserDTO formDto = (UserDTO) populateDTO(request);
+        ServletUtility.setDto(formDto, request);
+
+        if (e.getMessage() != null && e.getMessage().contains("Database")) {
+            ServletUtility.setErrorMessage(
+                "Server is temporarily unavailable. Please start MySQL and try again.",
+                request
+            );
+        } else {
+            ServletUtility.setErrorMessage("Login failed due to system error", request);
+        }
+
+        ServletUtility.forward(getView(), request, response);
+        return;
     }
-
-    ServletUtility.forward(getView(), request, response);
-    return;
 }
+
 
 
 	@Override
