@@ -268,40 +268,31 @@ public class UserModelHibImp implements UserModelInt {
 
 		return list;
 	}
-public UserDTO authenticate(String login, String password) throws ApplicationException {
 
-    Session session = null;
+	public UserDTO authenticate(String login, String password) throws ApplicationException {
+		
+		Session session = null;
+		
+		UserDTO dto = null;
+		
+		session = HibDataSource.getSession();
+		
+		Query q = session.createQuery("from UserDTO where login=? and password=?");
+		
+		q.setString(0, login);
+		
+		q.setString(1, password);
+		
+		List list = q.list();
+		
+		if (list.size() > 0) {
+			dto = (UserDTO) list.get(0);
+		} else {
+			dto = null;
 
-    try {
-        session = HibDataSource.getSession();
-
-        Query q = session.createQuery(
-            "from UserDTO where login = :login and password = :password"
-        );
-        q.setString("login", login);
-        q.setString("password", password);
-
-        List list = q.list();
-
-        if (list != null && !list.isEmpty()) {
-            return (UserDTO) list.get(0);
-        }
-        return null;   // ❗ wrong credentials
-
-    } catch (org.hibernate.exception.JDBCConnectionException e) {
-        // ❗ DB DOWN CASE
-        throw new ApplicationException("DB_DOWN");
-
-    } catch (Exception e) {
-        throw new ApplicationException("SYSTEM_ERROR", e);
-
-    } finally {
-        if (session != null) {
-            session.close();
-        }
-    }
-}
-
+		}
+		return dto;
+	}
 
 	public List getRoles(UserDTO dto) throws ApplicationException {
 	
