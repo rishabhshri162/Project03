@@ -151,28 +151,33 @@ public class LoginCtl extends BaseCtl {
 					ServletUtility.setErrorMessage("Invalid LoginId And Password!", request);
 				}
 
-			} catch (ApplicationException e) {   // ✅ yahi sahi jagah par catch aayega
+		catch (ApplicationException e) {
 
-				log.error(e);
+    log.error(e);
 
-				UserDTO formDto = (UserDTO) populateDTO(request);
-				ServletUtility.setDto(formDto, request);
+    UserDTO formDto = (UserDTO) populateDTO(request);
+    ServletUtility.setDto(formDto, request);
 
-				if (e.getMessage() != null && e.getMessage().contains("Database")) {
-					ServletUtility.setErrorMessage(
-							"Server is temporarily unavailable. Please start MySQL and try again.",
-							request);
-				} else {
-					ServletUtility.setErrorMessage(e.getMessage(), request);
-				}
+    if ("DB_DOWN".equals(e.getMessage())) {
 
-				ServletUtility.forward(getView(), request, response);
-				return;
-			}
-		}
+        // 🔴 MYSQL OFF
+        ServletUtility.setErrorMessage(
+            "Server is temporarily unavailable. Please try again later.",
+            request
+        );
 
-		ServletUtility.forward(getView(), request, response);
-	}
+    } else {
+
+        // 🔴 SYSTEM / OTHER ERROR
+        ServletUtility.setErrorMessage(
+            "Something went wrong. Please try again.",
+            request
+        );
+    }
+
+    ServletUtility.forward(getView(), request, response);
+    return;
+}
 
 	@Override
 	protected String getView() {
