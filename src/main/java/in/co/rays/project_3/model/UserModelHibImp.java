@@ -269,30 +269,43 @@ public class UserModelHibImp implements UserModelInt {
 		return list;
 	}
 
-	public UserDTO authenticate(String login, String password) throws ApplicationException {
-		
-		Session session = null;
-		
-		UserDTO dto = null;
-		
-		session = HibDataSource.getSession();
-		
-		Query q = session.createQuery("from UserDTO where login=? and password=?");
-		
-		q.setString(0, login);
-		
-		q.setString(1, password);
-		
-		List list = q.list();
-		
-		if (list.size() > 0) {
-			dto = (UserDTO) list.get(0);
-		} else {
-			dto = null;
+		public UserDTO authenticate(String login, String password) throws ApplicationException {
 
-		}
-		return dto;
+	    Session session = null;
+	    UserDTO dto = null;
+
+	    try {
+	        session = HibDataSource.getSession();
+
+	        Query q = session.createQuery(
+	            "from UserDTO where login = :login and password = :password"
+	        );
+	        q.setString("login", login);
+	        q.setString("password", password);
+
+	        List list = q.list();
+
+	        if (!list.isEmpty()) {
+	            dto = (UserDTO) list.get(0);
+	        }
+
+	    } catch (org.hibernate.exception.JDBCConnectionException e) {
+	        throw new ApplicationException(
+	            "Database server is down. Please start MySQL Docker container."
+	        );
+
+	    } catch (Exception e) {
+	        throw new ApplicationException("Authentication failed due to system error");
+
+	    } finally {
+	        if (session != null) {
+	            session.close();
+	        }
+	    }
+
+	    return dto;
 	}
+
 
 	public List getRoles(UserDTO dto) throws ApplicationException {
 	
