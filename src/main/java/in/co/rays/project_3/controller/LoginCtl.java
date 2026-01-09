@@ -26,9 +26,7 @@ import in.co.rays.project_3.util.ServletUtility;
  * login functionality controller. perform login operation
  * 
  * @author Rishabh Shrivastava
- *
  */
-
 @WebServlet(urlPatterns = { "/LoginCtl" })
 public class LoginCtl extends BaseCtl {
 
@@ -44,13 +42,11 @@ public class LoginCtl extends BaseCtl {
 	protected boolean validate(HttpServletRequest request) {
 
 		boolean pass = true;
-
 		String op = request.getParameter("operation");
 
 		if (OP_SIGN_UP.equals(op) || OP_LOG_OUT.equals(op)) {
 			return pass;
 		}
-//		System.out.println(request.getParameter("login") + ".........." + request.getParameter("password"));
 
 		if (DataValidator.isNull(request.getParameter("login"))) {
 			request.setAttribute("login", PropertyReader.getValue("error.require", "Login Id"));
@@ -59,138 +55,127 @@ public class LoginCtl extends BaseCtl {
 			request.setAttribute("login", PropertyReader.getValue("error.email", "Login "));
 			pass = false;
 		}
+
 		if (DataValidator.isNull(request.getParameter("password"))) {
 			request.setAttribute("password", PropertyReader.getValue("error.require", "password"));
 			pass = false;
 		}
 
 		return pass;
-
 	}
 
 	protected BaseDTO populateDTO(HttpServletRequest request) {
 
 		UserDTO dto = new UserDTO();
 
-		System.out.println(request.getParameter("login"));
-
 		dto.setId(DataUtility.getLong(request.getParameter("id")));
 		dto.setLogin(DataUtility.getString(request.getParameter("login")));
 		dto.setPassword(DataUtility.getString(request.getParameter("password")));
-		return dto;
 
+		return dto;
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 
-		System.out.println(request.getParameter("login"));
-
 		String op = request.getParameter("operation");
 
 		UserModelInt model = ModelFactory.getInstance().getUserModel();
-
 		HttpSession session = request.getSession(true);
 
 		long id = DataUtility.getLong(request.getParameter("id"));
 
 		if (OP_LOG_OUT.equals(op)) {
-			session = request.getSession();
 			session.invalidate();
 			ServletUtility.setSuccessMessage("User Logged Out Successfully!", request);
 			ServletUtility.forward(ORSView.LOGIN_VIEW, request, response);
 			return;
 		}
+
 		if (id > 0) {
-			UserDTO dto;
 			try {
-				dto = model.findByPK(id);
+				UserDTO dto = model.findByPK(id);
 				ServletUtility.setDto(dto, request);
 			} catch (ApplicationException e) {
-
-				e.printStackTrace();
 				ServletUtility.handleException(e, request, response);
 				return;
 			}
-
 		}
-		ServletUtility.forward(getView(), request, response);
 
+		ServletUtility.forward(getView(), request, response);
 	}
 
-@Override
-protected void doPost(HttpServletRequest request, HttpServletResponse response)
-        throws IOException, ServletException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
 
-    String op = request.getParameter("operation");
-    HttpSession session = request.getSession(true);
+		String op = request.getParameter("operation");
+		HttpSession session = request.getSession(true);
 
-    UserModelInt userModel = ModelFactory.getInstance().getUserModel();
-    RoleModelInt roleModel = ModelFactory.getInstance().getRoleModel();
+		UserModelInt userModel = ModelFactory.getInstance().getUserModel();
+		RoleModelInt model1 = ModelFactory.getInstance().getRoleModel();
 
-    if (OP_SIGN_IN.equalsIgnoreCase(op)) {
+		if (OP_SIGN_IN.equalsIgnoreCase(op)) {
 
-        UserDTO dto = (UserDTO) populateDTO(request);
+			UserDTO dto = (UserDTO) populateDTO(request);
 
-        try {
+			try {
 
-            dto = userModel.authenticate(dto.getLogin(), dto.getPassword());
+				dto = userModel.authenticate(dto.getLogin(), dto.getPassword());
 
-            if (dto != null) {
+				if (dto != null) {
 
-                session.setAttribute("user", dto);
+					session.setAttribute("user", dto);
 
-                RoleDTO rdto = roleModel.findByPK(dto.getRoleId());
-                if (rdto != null) {
-                    session.setAttribute("role", rdto.getName());
-                }
+					long roleId = dto.getRoleId();
+					RoleDTO rdto = model1.findByPK(roleId);
 
-                String uri = request.getParameter("uri");
-                if (uri == null || "null".equalsIgnoreCase(uri)) {
-                    ServletUtility.redirect(ORSView.WELCOME_CTL, request, response);
-                } else {
-                    if (rdto != null && rdto.getId() == 1) {
-                        ServletUtility.redirect(uri, request, response);
-                    } else {
-                        ServletUtility.redirect(ORSView.WELCOME_CTL, request, response);
-                    }
-                }
-                return;
+					if (rdto != null) {
+						session.setAttribute("role", rdto.getName());
+					}
 
-            } else {
-                ServletUtility.setDto(dto, request);
-                ServletUtility.setErrorMessage("Invalid LoginId And Password!", request);
-            }
+					String uri = request.getParameter("uri");
 
-        } catch (ApplicationException e) {
+					if (uri == null || "null".equalsIgnoreCase(uri)) {
+						ServletUtility.redirect(ORSView.WELCOME_CTL, request, response);
+					} else {
+						if (rdto != null && rdto.getId() == 1) {
+							ServletUtility.redirect(uri, request, response);
+						} else {
+							ServletUtility.redirect(ORSView.WELCOME_CTL, request, response);
+						}
+					}
+					return;
 
-            log.error(e);
+				} else {
+					ServletUtility.setDto(dto, request);
+					ServletUtility.setErrorMessage("Invalid LoginId And Password!", request);
+				}
 
-            ServletUtility.setDto(dto, request);
+			} catch (ApplicationException e) {   // ✅ yahi sahi jagah par catch aayega
 
-            if (e.getMessage() != null && e.getMessage().contains("Database")) {
-                ServletUtility.setErrorMessage(
-                        "Server is temporarily unavailable. Please start MySQL and try again.",
-                        request);
-            } else {
-                ServletUtility.setErrorMessage(
-                        "Login failed due to system error.",
-                        request);
-            }
+				log.error(e);
 
-            ServletUtility.forward(getView(), request, response);
-            return;
-        }
-    }
+				UserDTO formDto = (UserDTO) populateDTO(request);
+				ServletUtility.setDto(formDto, request);
 
-    ServletUtility.forward(getView(), request, response);
-}
+				if (e.getMessage() != null && e.getMessage().contains("Database")) {
+					ServletUtility.setErrorMessage(
+							"Server is temporarily unavailable. Please start MySQL and try again.",
+							request);
+				} else {
+					ServletUtility.setErrorMessage(e.getMessage(), request);
+				}
 
+				ServletUtility.forward(getView(), request, response);
+				return;
+			}
+		}
+
+		ServletUtility.forward(getView(), request, response);
+	}
 
 	@Override
 	protected String getView() {
-
 		return ORSView.LOGIN_VIEW;
 	}
-
 }
