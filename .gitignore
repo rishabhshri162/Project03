@@ -19,25 +19,6 @@ Thumbs.db
 desktop.ini
 
 # =========================
-# Hostel / HostelRoom module (BLOCKED FOREVER)
-# =========================
-
-# Java source
-src/main/java/**/Hostel*.java
-src/main/java/**/HostelRoom*.java
-
-# Hibernate mapping files
-src/main/java/**/Hostel*.hbm.xml
-src/main/resources/**/Hostel*.hbm.xml
-
-# JSP views
-src/main/webapp/**/Hostel*.jsp
-src/main/webapp/**/HostelRoom*.jsp
-
-# Tests
-src/test/java/**/Hostel*.java
-
-# =========================
 # Secrets
 # =========================
 .env
