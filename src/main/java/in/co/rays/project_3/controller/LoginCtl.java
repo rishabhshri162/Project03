@@ -166,7 +166,6 @@ public class LoginCtl extends BaseCtl {
 				log.error(e1);
 //				ServletUtility.handleException(e, request, response);
 				ServletUtility.setErrorMessage("COMMUNICATION LINK FAILURE!", request);
-=======
 				System.out.println("in catch block ==================>>>>>>>>> ");
 				log.error(e1);
 //				ServletUtility.handleException(e, request, response);
