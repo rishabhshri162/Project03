@@ -36,7 +36,7 @@ public final class ModelFactory {
 				hostelRoomModel = new HostelRoomModelHibImp();
 			}
 			if ("JDBC".equals(DATABASE)) {
-				hostelRoomModel = new HostelRoomModelHibImp();
+				hostelRoomModel = new HostelRoomModelJDBCImpl();
 			}
 			modelCache.put("hostelRoomModel", hostelRoomModel);
 		}

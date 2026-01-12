@@ -16,7 +16,7 @@
       changeMonth : true,
 		changeYear : true,
 		yearRange : '1970:2030',
-		dateFormat : 'dd/mm/yy',
+		dateFormat : 'MM/dd/yyyy',
 		endDate : '-18y',
 			maxDate:0 
     });

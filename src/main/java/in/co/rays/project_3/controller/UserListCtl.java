@@ -60,6 +60,8 @@ public class UserListCtl extends BaseCtl {
 		
 		dto.setRoleId(DataUtility.getLong(request.getParameter("Role")));
 		
+		dto.setGender(DataUtility.getString(request.getParameter("gender")));
+		
 		populateBean(dto, request);
 		return dto;
 	}
@@ -79,47 +81,31 @@ public class UserListCtl extends BaseCtl {
 		int pageSize = DataUtility.getInt(PropertyReader.getValue("page.size"));
 
 		UserDTO dto = (UserDTO) populateDTO(request);
-		// get the selected checkbox ids array for delete list
 
 		UserModelInt model = ModelFactory.getInstance().getUserModel();
+		
 		try {
 
-			list = model.search(dto, pageNo, pageSize);
+			List<UserDTO> listt = model.search(dto, pageNo, pageSize);
+			List<UserDTO> nextt = model.search(dto, pageNo + 1, pageSize);
 
-			ArrayList<UserDTO> a = (ArrayList<UserDTO>) list;
-
-			for (UserDTO udto1 : a) {
-				System.out.println(udto1.getRoleId() + "[[[[[[[[[[[--------------------");
+			if (listt == null || listt.isEmpty()) {
+				ServletUtility.setErrorMessage("No record found", request);
 			}
 
-			System.out.println(list + "----------------------------------------------------------");
-			System.out.println(list.indexOf(3));
-			next = model.search(dto, pageNo + 1, pageSize);
-			ServletUtility.setList(list, request);
-			if (list == null || list.size() == 0) {
-				ServletUtility.setErrorMessage("No record found ", request);
-			}
-			if (next == null || next.size() == 0) {
-				request.setAttribute("nextListSize", 0);
-
-			} else {
-				request.setAttribute("nextListSize", next.size());
-			}
-			ServletUtility.setList(list, request);
+			ServletUtility.setList(listt, request);
 			ServletUtility.setPageNo(pageNo, request);
 			ServletUtility.setPageSize(pageSize, request);
+			ServletUtility.setDto(dto, request);
+			request.setAttribute("nextListSize", nextt.size());
+
 			ServletUtility.forward(getView(), request, response);
+
 		} catch (ApplicationException e) {
-			log.error(e);
-			ServletUtility.handleException(e, request, response);
-			return;
-		} catch (Exception e) {
-
 			e.printStackTrace();
+			return;
 		}
-		log.debug("UserListCtl doPOst End");
 	}
-
 	/**
 	 * Contains Submit logics
 	 */
@@ -138,6 +124,7 @@ public class UserListCtl extends BaseCtl {
 		pageNo = (pageNo == 0) ? 1 : pageNo;
 		pageSize = (pageSize == 0) ? DataUtility.getInt(PropertyReader.getValue("page.size")) : pageSize;
 
+
 		UserDTO dto = (UserDTO) populateDTO(request);
 
 		String op = DataUtility.getString(request.getParameter("operation"));
@@ -151,27 +138,42 @@ public class UserListCtl extends BaseCtl {
 			if (OP_SEARCH.equalsIgnoreCase(op) || "Next".equalsIgnoreCase(op) || "Previous".equalsIgnoreCase(op)) {
 
 				if (OP_SEARCH.equalsIgnoreCase(op)) {
+					
 					pageNo = 1;
+					
 				} else if (OP_NEXT.equalsIgnoreCase(op)) {
+					
 					pageNo++;
+					
 				} else if (OP_PREVIOUS.equalsIgnoreCase(op) && pageNo > 1) {
+					
 					pageNo--;
 				}
 
 			} else if (OP_NEW.equalsIgnoreCase(op)) {
+				
 				ServletUtility.redirect(ORSView.USER_CTL, request, response);
 				return;
+				
 			} else if (OP_RESET.equalsIgnoreCase(op)) {
 
 				ServletUtility.redirect(ORSView.USER_LIST_CTL, request, response);
 				return;
+				
 			} else if (OP_DELETE.equalsIgnoreCase(op)) {
+				
 				pageNo = 1;
+				
 				if (ids != null && ids.length > 0) {
+					
 					UserDTO deletedto = new UserDTO();
+					
 					for (String id : ids) {
+						
 						deletedto.setId(DataUtility.getLong(id));
+						
 						model.delete(deletedto);
+						
 						ServletUtility.setSuccessMessage("Data Successfully Deleted!", request);
 					}
 				} else {
@@ -179,47 +181,32 @@ public class UserListCtl extends BaseCtl {
 				}
 			}
 			if (OP_BACK.equalsIgnoreCase(op)) {
+				
 				ServletUtility.redirect(ORSView.USER_LIST_CTL, request, response);
+				
 				return;
 			}
-			dto = (UserDTO) populateDTO(request);
-			System.out.println("y yyyyyyyyyy" + dto.getRoleId());
-
+			
 			list = model.search(dto, pageNo, pageSize);
-
-			ServletUtility.setDto(dto, request);
 			next = model.search(dto, pageNo + 1, pageSize);
 
-			ServletUtility.setList(list, request);
-			ServletUtility.setList(list, request);
-
 			if (list == null || list.size() == 0) {
-				if (!OP_DELETE.equalsIgnoreCase(op)) {
-					ServletUtility.setErrorMessage("No record found ", request);
-				}
+				ServletUtility.setErrorMessage("No record found ", request);
 			}
-			if (next == null || next.size() == 0) {
-				request.setAttribute("nextListSize", 0);
 
-			} else {
-				request.setAttribute("nextListSize", next.size());
-			}
 			ServletUtility.setList(list, request);
 			ServletUtility.setPageNo(pageNo, request);
 			ServletUtility.setPageSize(pageSize, request);
+			ServletUtility.setDto(dto, request);
+			request.setAttribute("nextListSize", next.size());
+
 			ServletUtility.forward(getView(), request, response);
 
 		} catch (ApplicationException e) {
-			log.error(e);
-			ServletUtility.handleException(e, request, response);
-			return;
-		} catch (Exception e) {
-// TODO Auto-generated catch block
 			e.printStackTrace();
+			return;
 		}
-		log.debug("UserListCtl doGet End");
 	}
-
 	@Override
 	protected String getView() {
 		return ORSView.USER_LIST_VIEW;

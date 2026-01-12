@@ -1,4 +1,5 @@
 
+<%@page import="java.util.HashMap"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="java.util.List"%>
 <%@page import="in.co.rays.project_3.model.ModelFactory"%>
@@ -20,14 +21,13 @@
 	src="<%=ORSView.APP_CONTEXT%>/js/CheckBox11.js"></script>
 <style>
 .hm {
-	background-image: url('<%=ORSView.APP_CONTEXT%>/img/al.jpg');
-	
+	background-image: url('<%=ORSView.APP_CONTEXT%>/img/list.png');
 	background-repeat: no-repeat;
-	background-attachment: fixed; 
+	background-attachment: fixed;
 	background-size: cover;
 	padding-top: 85px;
-	
-    /*  background-size: 100%; */
+
+	/*  background-size: 100%; */
 }
 
 .p1 {
@@ -116,12 +116,29 @@
 				</div>
 				&emsp;
 				<div class="col-sm-2">
-					<input type="text" name="login" placeholder="Enter Login Id"
+					<input type="text" name="login" placeholder="Enter login"
 						class="form-control"
 						value="<%=ServletUtility.getParameter("login", request)%>">
 				</div>
 				&emsp;
+				<%-- <div class="col-sm-2">
+					<input type="text" name="dob" id="datepicker" placeholder="Enter dob"
+						class="form-control"
+						value="<%=ServletUtility.getParameter("dob", request)%>">
+				</div>
+				&emsp; --%>
 				<div class="col-sm-3"><%=HTMLUtility.getList("Role", String.valueOf(dto.getRoleId()), list1)%></div>
+				&emsp;
+				<%-- <div class="col-sm-3">
+				<%
+				HashMap<String, String> map = new HashMap<String, String>();
+						map.put("Female", "Female");
+						map.put("Male", "Male");
+
+						String htmlList = HTMLUtility.getList("gender", dto.getGender(), map);
+				%>
+				<%=htmlList%> --%>
+
 
 				<div class="col-sm-2">
 					<input type="submit" class="btn btn-primary btn-md"
@@ -155,7 +172,7 @@
 						while (it.hasNext()) {
 								dto = it.next();
 
-								RoleDTO rbean = rmodel.findByPK(dto.getRoleId());
+								RoleDTO rdto = rmodel.findByPK(dto.getRoleId());
 					%>
 					<tbody>
 						<tr>
@@ -168,7 +185,7 @@
 							<td class="text"><%=dto.getLastName()%></td>
 							<td class="text"><%=dto.getLogin()%></td>
 							<td class="text"><%=dto.getGender()%></td>
-							<td class="text"><%=rbean.getName()%></td>
+							<td class="text"><%=rdto.getName()%></td>
 							<td class="text"><%=DataUtility.getDateString(dto.getDob())%></td>
 							<td class="text"><a href="UserCtl?id=<%=dto.getId()%>"
 								<%if (dto.getRoleId() == RoleDTO.ADMIN) {%>

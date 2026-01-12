@@ -140,7 +140,6 @@ public abstract class BaseCtl extends HttpServlet{
             }
         }
         super.service(request, response);
-        System.out.println("Service base");
     }
 
     /**

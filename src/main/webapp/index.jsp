@@ -10,7 +10,7 @@
 }
 
 body {
-	background-image: url('img/kurp2.jpg');
+	background-image: url('img/clock.jpg');
 	background-size: cover;
 	background-repeat: no-repeat;
 }

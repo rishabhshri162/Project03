@@ -9,7 +9,7 @@
 <style>
 .p4 {
 	background-image:
-		url('<%=ORSView.APP_CONTEXT%>/img/rishabh.jpg');
+		url('<%=ORSView.APP_CONTEXT%>/img/day.jpg');
 	background-size: 100%;
 	background-repeat: no-repeat;
 }

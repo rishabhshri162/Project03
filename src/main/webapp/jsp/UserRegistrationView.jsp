@@ -49,7 +49,7 @@ i.css {
 }
 
 .p4 {
-	background-image: url('<%=ORSView.APP_CONTEXT%>/img/registeruser1.jpg');
+	background-image: url('<%=ORSView.APP_CONTEXT%>/img/4236127.jpg');
 	background-size: 100%;
 	padding-top: 60px;
 }

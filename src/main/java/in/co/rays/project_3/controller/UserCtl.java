@@ -44,22 +44,11 @@ public class UserCtl extends BaseCtl {
 
 		try {
 			List list = model.list();
-			Iterator it = list.iterator();
-
-			while (it.hasNext()) {
-				RoleDTO dto = (RoleDTO) it.next();
-				System.out.println(dto.getId());
-				System.out.println(dto.getName());
-				System.out.println(dto.getDescription());
-
-			}
-
 			request.setAttribute("roleList", list);
-
 		} catch (Exception e) {
-			e.printStackTrace();
-		}
+			log.error(e);
 
+		}
 	}
 
 	protected boolean validate(HttpServletRequest request) {
@@ -137,10 +126,7 @@ public class UserCtl extends BaseCtl {
 			request.setAttribute("confirmPassword", "Confirm  Password  should  be matched.");
 			pass = false;
 		}
-		System.out.println(request.getParameter("dob"));
-		System.out.println("validate end " + pass + "................" + request.getParameter("id"));
-		System.out.println(request.getParameter("password"));
-		System.out.println(request.getParameter("confirmPassword"));
+		
 		return pass;
 
 	}
@@ -185,17 +171,14 @@ public class UserCtl extends BaseCtl {
 
 		log.debug("UserCtl Method doGet Started");
 
-		String op = DataUtility.getString(request.getParameter("operation"));
 
 		// get model
 		UserModelInt model = ModelFactory.getInstance().getUserModel();
 		long id = DataUtility.getLong(request.getParameter("id"));
 
-		if (id > 0 || op != null) {
-			System.out.println("in id > 0  condition");
-			UserDTO dto = null;
+		if (id > 0) {
 			try {
-				dto = model.findByPK(id);
+				UserDTO dto = model.findByPK(id);
 				ServletUtility.setDto(dto, request);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -212,7 +195,6 @@ public class UserCtl extends BaseCtl {
 
 		String op = DataUtility.getString(request.getParameter("operation"));
 
-		// get model
 		UserModelInt model = ModelFactory.getInstance().getUserModel();
 
 		long id = DataUtility.getLong(request.getParameter("id"));
@@ -252,19 +234,7 @@ public class UserCtl extends BaseCtl {
 				ServletUtility.setDto(dto, request);
 				ServletUtility.setErrorMessage("Login id already exists", request);
 			}
-		} else if (OP_DELETE.equalsIgnoreCase(op)) {
-
-			UserDTO dto = (UserDTO) populateDTO(request);
-			try {
-				model.delete(dto);
-				ServletUtility.redirect(ORSView.USER_LIST_CTL, request, response);
-				return;
-			} catch (ApplicationException e) {
-				log.error(e);
-				ServletUtility.handleException(e, request, response);
-				return;
-			}
-
+		
 		} else if (OP_CANCEL.equalsIgnoreCase(op)) {
 
 			ServletUtility.redirect(ORSView.USER_LIST_CTL, request, response);

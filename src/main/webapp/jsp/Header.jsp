@@ -91,12 +91,7 @@
 							<i class="fa fa-edit"></i> Change Password
 						</a>
 					</div></li>
-
-				<%
-					} else if (userDto.getRoleId() == RoleDTO.ADMIN) {
-				%>
-
-				<%-- <li class="nav-item dropdown" style="padding-left: 5px;"><a
+					 <li class="nav-item dropdown" style="padding-left: 5px;"><a
 					class="nav-link dropdown-toggle" href="#" id="hostelDropdown"
 					role="button" data-toggle="dropdown" aria-haspopup="true"
 					aria-expanded="false"> <font style="color: white;">Hostel</font>
@@ -107,8 +102,27 @@
 							class="fa fa-bed"></i> Add Hostel Room
 						</a> <a class="dropdown-item" href="<%=ORSView.HOSTELROOM_LIST_CTL%>"><i
 							class="fa fa-user-friends"></i>Hostel List</a>
-					</div></li> --%>
+					</div></li> 
 
+					
+
+				<%
+					} else if (userDto.getRoleId() == RoleDTO.ADMIN) {
+				%>
+
+ 				<%--  <li class="nav-item dropdown" style="padding-left: 5px;"><a
+ 					class="nav-link dropdown-toggle" href="#" id="hostelDropdown"
+					role="button" data-toggle="dropdown" aria-haspopup="true"
+					aria-expanded="false"> <font style="color: white;">Hostel</font>
+				</a>
+					<div class="dropdown-menu" aria-labelledby="hostelDropdown">
+
+						<a class="dropdown-item" href="<%=ORSView.HOSTELROOM_CTL%>"> <i
+							class="fa fa-bed"></i> Add Hostel Room
+						</a> <a class="dropdown-item" href="<%=ORSView.HOSTELROOM_LIST_CTL%>"><i
+							class="fa fa-list"></i>Hostel List</a>
+					</div></li> 
+ --%>
 
 
 				<li class="nav-item dropdown" style="padding-left: 5px;"><a
@@ -121,7 +135,7 @@
 						<a class="dropdown-item" href="<%=ORSView.USER_CTL%>"><i
 							class="fa fa-user-circle"></i>Add User</a> <a class="dropdown-item"
 							href="<%=ORSView.USER_LIST_CTL%>"><i
-							class="fa fa-user-friends"></i>User List</a>
+							class="fa fa-list"></i>User List</a>
 					</div></li>
 
 				<li class="nav-item dropdown" style="padding-left: 5px"><a
@@ -134,10 +148,10 @@
 
 						<a class="dropdown-item" href="<%=ORSView.MARKSHEET_CTL%>"><i
 							class="fa fa-file"></i>Add Marksheet</a> <a class="dropdown-item"
-							href="<%=ORSView.MARKSHEET_LIST_CTL%>"><i class="fa fa-paste"></i>Marksheet
+							href="<%=ORSView.MARKSHEET_LIST_CTL%>"><i class="fa fa-list"></i>Marksheet
 							List</a> <a class="dropdown-item"
 							href="<%=ORSView.MARKSHEET_MERIT_LIST_CTL%>"><i
-							class=" fa fa-file-alt"></i>Marksheet Merit List </a> <a
+							class="fa fa-star"></i>Marksheet Merit List </a> <a
 							class="dropdown-item" href="<%=ORSView.GET_MARKSHEET_CTL%>"><i
 							class="fa fa-copy"></i>Get Marksheet</a>
 					</div></li>
@@ -151,7 +165,7 @@
 						<a class="dropdown-item" href="<%=ORSView.ROLE_CTL%>"><i
 							class="fa fa-user-tie"></i>Add Role</a> <a class="dropdown-item"
 							href="<%=ORSView.ROLE_LIST_CTL%>"><i
-							class="fa fa-user-friends"></i>Role List</a>
+							class="fa fa-list"></i>Role List</a>
 					</div></li>
 				<li class="nav-item dropdown" style="padding-left: 5px"><a
 					class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
@@ -162,7 +176,7 @@
 						<a class="dropdown-item" href="<%=ORSView.COLLEGE_CTL%>"><i
 							class="fa fa-university"></i>Add College</a> <a class="dropdown-item"
 							href="<%=ORSView.COLLEGE_LIST_CTL%>"><i
-							class="fa fa-building"></i>College List </a>
+							class="fa fa-list"></i>College List </a>
 					</div></li>
 				<li class="nav-item dropdown" style="padding-left: 5px"><a
 					class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
@@ -173,7 +187,7 @@
 						<a class="dropdown-item" href="<%=ORSView.COURSE_CTL%>"><i
 							class="fa fa-book-open"></i>Add Course</a> <a class="dropdown-item"
 							href="<%=ORSView.COURSE_LIST_CTL%>"><i
-							class="fa fa-sort-amount-down"></i>Course List </a>
+							class="fa fa-list"></i>Course List </a>
 					</div></li>
 				<li class="nav-item dropdown" style="padding-left: 5px"><a
 					class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
@@ -184,7 +198,7 @@
 						<a class="dropdown-item" href="<%=ORSView.STUDENT_CTL%>"><i
 							class="fa fa-user-circle"></i>Add Student</a> <a
 							class="dropdown-item" href="<%=ORSView.STUDENT_LIST_CTL%>"><i
-							class="fa fa-users"></i>Student List</a>
+							class="fa fa-list"></i>Student List</a>
 					</div></li>
 				<li class="nav-item dropdown" style="padding-left: 5px"><a
 					class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
@@ -194,7 +208,7 @@
 					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 						<a class="dropdown-item" href="<%=ORSView.FACULTY_CTL%>"><i
 							class="fa fa-user-tie"></i>Add Faculty</a> <a class="dropdown-item"
-							href="<%=ORSView.FACULTY_LIST_CTL%>"><i class=" fa fa-users"></i>Faculty
+							href="<%=ORSView.FACULTY_LIST_CTL%>"><i class=" fa fa-list"></i>Faculty
 							List</a>
 					</div></li>
 
@@ -207,7 +221,7 @@
 					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 						<a class="dropdown-item" href="<%=ORSView.TIMETABLE_CTL%>"><i
 							class="fa fa-clock"></i>Add TimeTable</a> <a class="dropdown-item"
-							href="<%=ORSView.TIMETABLE_LIST_CTL%>"><i class="fa fa-clock"></i>TimeTable
+							href="<%=ORSView.TIMETABLE_LIST_CTL%>"><i class="fa fa-list"></i>TimeTable
 							List</a>
 					</div></li>
 				<li class="nav-item dropdown" style="padding-left: 5px"><a
@@ -219,7 +233,7 @@
 						<a class="dropdown-item" href="<%=ORSView.SUBJECT_CTL%>"><i
 							class="fa fa-calculator"></i>Add Subject</a> <a class="dropdown-item"
 							href="<%=ORSView.SUBJECT_LIST_CTL%>"> <i
-							class="fa fa-sort-amount-down"></i>Subject List
+							class="fa fa-list"></i>Subject List
 						</a>
 					</div></li>
 
