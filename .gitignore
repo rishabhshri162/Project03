@@ -43,3 +43,4 @@ src/test/java/**/Hostel*.java
 .env
 *.key
 *.pem
+/.metadata/
