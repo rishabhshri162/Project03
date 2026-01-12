@@ -45,11 +45,5 @@ src/test/java/**/Hostel*.java
 *.pem
 /.metadata/
 
-git rm src/in/co/rays/project_3/dto/HostelRoomDTO.java
-git rm src/in/co/rays/project_3/model/HostelRoomModel.java
-git rm src/in/co/rays/project_3/controller/HostelRoomCtl.java
-git rm src/in/co/rays/project_3/controller/HostelRoomListCtl.java
-git rm WebContent/HostelRoomView.jsp
-git rm WebContent/HostelRoomListView.jsp
-git rm src/in/co/rays/project_3/dto/HostelRoom.hbm.xml
+
 
