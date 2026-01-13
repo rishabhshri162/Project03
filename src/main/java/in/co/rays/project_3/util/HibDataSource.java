@@ -1,5 +1,7 @@
 package in.co.rays.project_3.util;
 
+import java.util.ResourceBundle;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -8,7 +10,7 @@ import org.hibernate.cfg.Configuration;
  * Hibernate DataSource is provides the object of session factory and session
  * 
  * 
- * @author Rishabh Shrivastava
+ * @author Deepak Verma
  *
  */
 public class HibDataSource {
