@@ -6,7 +6,7 @@
 
 	<session-factory>
 		<property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
-		<!-- <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/project_3</property> -->
+		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/project_3</property>
 
 		<!-- <property name="hibernate.connection.url">jdbc:mysql://mysql:3306/project_3</property> -->
 
@@ -32,10 +32,6 @@
 			name="hibernate.c3p0.idle_test_period">3000</property> -->
 
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 3ba3e6a162aff36db348449e2830e7b25ab52c98
 	<mapping resource="in/co/rays/project_3/hbm/UserDTO.hbm.xml" />
 	<mapping resource="in/co/rays/project_3/hbm/StudentDTO.hbm.xml" />
 	<mapping resource="in/co/rays/project_3/hbm/CollegeDTO.hbm.xml" />
