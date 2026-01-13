@@ -162,16 +162,9 @@ public class LoginCtl extends BaseCtl {
 				}
 
 			} catch (ApplicationException | JDBCConnectionException e1) {
-<<<<<<< HEAD
 				log.error(e1);
 //				ServletUtility.handleException(e, request, response);
 				ServletUtility.setErrorMessage("COMMUNICATION LINK FAILURE!", request);
-=======
-				System.out.println("in catch block ==================>>>>>>>>> ");
-				log.error(e1);
-//				ServletUtility.handleException(e, request, response);
-				ServletUtility.setErrorMessage("YOUR MYSQL CONTAINER IS OFF COMMUNICTAION LINK FAILURE!", request);
->>>>>>> 5638a700ab060dbdb1203dc5f486c3344ccda63d
 				ServletUtility.forward(getView(), request, response);
 				return;
 			}

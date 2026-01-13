@@ -135,7 +135,6 @@ public class ChangePasswordCtl extends BaseCtl {
 		log.debug("ChangePasswordCtl Method doGet Ended");
 
 	}
-	
 
 	protected String getView() {
 

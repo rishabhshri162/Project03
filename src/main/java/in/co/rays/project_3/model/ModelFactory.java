@@ -29,7 +29,6 @@ public final class ModelFactory {
 		return mFactory;
 	}
 
-<<<<<<< HEAD
 	public HostelRoomModelInt getHostelRoomModel() {
 		HostelRoomModelInt hostelRoomModel = (HostelRoomModelInt) modelCache.get("hostelRoomModel");
 		if (hostelRoomModel == null) {
@@ -44,8 +43,6 @@ public final class ModelFactory {
 		return hostelRoomModel;
 	}
 
-=======
->>>>>>> 5638a700ab060dbdb1203dc5f486c3344ccda63d
 	public ProductModelInt getProductModel() {
 		ProductModelInt productModel = (ProductModelInt) modelCache.get("productModel");
 		if (productModel == null) {
